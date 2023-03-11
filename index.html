@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Calcolatore cedola BTP Italia</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<title>Calcolatore Cedola BTP Italia</title>
 </head>
 <body>
-	<h1>Calcolatore cedola BTP Italia</h1>
+	<h1>Calcolatore Cedola BTP Italia</h1>
+	
+	<form>
+		<label for="capitale">Capitale:</label>
+		<input type="number" id="capitale" name="capitale" placeholder="Inserisci il capitale" required><br><br>
 
-	<form id="calc-form">
-		<label for="tasso-annuo-reale">Tasso annuo reale:</label>
-		<input type="number" id="tasso-annuo-reale" step="0.01" required><br>
+		<label for="tassoNom">Tasso nominale:</label>
+		<input type="number" id="tassoNom" name="tassoNom" placeholder="Inserisci il tasso nominale" min="0" required><br><br>
 
-		<label for="tasso-inflazione">Tasso di inflazione:</label>
-		<input type="number" id="tasso-inflazione" step="0.01" required><br>
+		<label for="inflazione">Inflazione attesa:</label>
+		<input type="number" id="inflazione" name="inflazione" placeholder="Inserisci l'inflazione attesa" min="0" required><br><br>
 
-		<label for="aliquota">Aliquota fiscale:</label>
-		<input type="number" id="aliquota" step="0.01" required><br>
-
-		<button type="submit">Calcola cedola semestrale</button>
+		<button type="button" onclick="calcolaCedola()">Calcola Cedola</button>
 	</form>
 
-	<div id="output"></div>
+	<p>La cedola semestrale del BTP Italia è: <span id="cedola"></span></p>
 
 	<script>
-		document.getElementById("calc-form").addEventListener("submit", function(event) {
-			event.preventDefault();
+		function calcolaCedola() {
+			const capitale = document.getElementById("capitale").value;
+			const tassoNom = document.getElementById("tassoNom").value / 100;
+			const inflazione = document.getElementById("inflazione").value / 100;
 
-			const tassoAnnuoReale = parseFloat(document.getElementById("tasso-annuo-reale").value);
-			const tassoInflazione = parseFloat(document.getElementById("tasso-inflazione").value);
-			const aliquota = parseFloat(document.getElementById("aliquota").value);
+			const cedola = (tassoNom + inflazione) * capitale / 2;
 
-			const tassoAnnuoEffettivo = (1 + tassoAnnuoReale) * (1 + tassoInflazione) - 1;
-			const tassoSemestraleEffettivo = tassoAnnuoEffettivo / 2;
-			const cedolaSemestrale = tassoSemestraleEffettivo * (1 - aliquota);
-
-			document.getElementById("output").innerHTML = `La cedola semestrale è: ${cedolaSemestrale.toFixed(2)}`;
-		});
+			document.getElementById("cedola").innerHTML = cedola.toFixed(2);
+		}
 	</script>
 </body>
 </html>
